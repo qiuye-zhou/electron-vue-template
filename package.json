@@ -1,0 +1,63 @@
+{
+  "name": "electron-vue-template",
+  "version": "1.0.0",
+  "description": "Electron + Vue 3 + Vite 开发模板",
+  "main": "dist-electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/build.js",
+    "build:web": "vue-tsc && vite build",
+    "build:electron": "electron-builder",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "electron:build": "npm run build:web && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": [
+    "electron",
+    "vue3",
+    "vite",
+    "desktop",
+    "app"
+  ],
+  "author": "秋叶ゞ",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^10.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "typescript": "^5.9.2",
+    "vite": "^5.0.0",
+    "vue-tsc": "^3.0.7",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "build": {
+    "appId": "com.example.electron-vue-template",
+    "productName": "Electron Vue Template",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

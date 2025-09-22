@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, shell } = require('electron')
+const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = require('electron')
 const path = require('path')
 
 // 开发环境判断
@@ -40,10 +40,10 @@ function createWindow() {
         })
       })
     }
-    
+
     // 延迟加载，确保 Vite 服务器已启动
     setTimeout(loadDevServer, 1000)
-    
+
     // 开发环境下打开开发者工具
     mainWindow.webContents.openDevTools()
   } else {
@@ -174,6 +174,73 @@ function createMenu() {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
+
+// IPC 处理器
+ipcMain.handle('window:minimize', () => {
+  if (mainWindow) {
+    mainWindow.minimize()
+  }
+})
+
+ipcMain.handle('window:maximize', () => {
+  if (mainWindow) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
+  }
+})
+
+ipcMain.handle('window:close', () => {
+  if (mainWindow) {
+    mainWindow.close()
+  }
+})
+
+ipcMain.handle('dialog:openFile', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile'],
+    filters: [
+      { name: '所有文件', extensions: ['*'] },
+      { name: '文本文件', extensions: ['txt', 'md'] },
+      { name: '图片文件', extensions: ['jpg', 'png', 'gif'] }
+    ]
+  })
+
+  if (!result.canceled && result.filePaths.length > 0) {
+    return result.filePaths[0]
+  }
+  return null
+})
+
+ipcMain.handle('dialog:saveFile', async (event, content) => {
+  const result = await dialog.showSaveDialog(mainWindow, {
+    filters: [
+      { name: '文本文件', extensions: ['txt'] },
+      { name: 'Markdown 文件', extensions: ['md'] },
+      { name: '所有文件', extensions: ['*'] }
+    ]
+  })
+
+  if (!result.canceled && result.filePath) {
+    const fs = require('fs')
+    try {
+      fs.writeFileSync(result.filePath, content, 'utf8')
+      return result.filePath
+    } catch (error) {
+      throw new Error(`保存文件失败: ${error.message}`)
+    }
+  }
+  return null
+})
+
+ipcMain.handle('send-message', (event, message) => {
+  console.log('收到渲染进程消息:', message)
+  // 可以在这里处理消息并发送回渲染进程
+  mainWindow.webContents.send('main-message', `主进程收到: ${message}`)
+  return `已收到消息: ${message}`
+})
 
 // 安全设置：防止新窗口创建
 app.on('web-contents-created', (event, contents) => {

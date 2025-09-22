@@ -79,6 +79,7 @@ const openFile = async (): Promise<void> => {
   if (window.electronAPI) {
     try {
       const result = await window.electronAPI.openFile()
+      console.log("🚀 ~ openFile ~ result:", result)
       message.value = result ? `已选择文件: ${result}` : '未选择文件'
     } catch (error) {
       message.value = `打开文件失败: ${(error as Error).message}`

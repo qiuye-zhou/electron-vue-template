@@ -2,7 +2,7 @@
   "name": "electron-vue-template",
   "version": "1.0.0",
   "description": "Electron + Vue 3 + Vite 开发模板",
-  "main": "dist-electron/main.cjs",
+  "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "vite",

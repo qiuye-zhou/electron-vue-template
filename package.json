@@ -6,13 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/build.js",
     "build:web": "vue-tsc && vite build",
-    "build:electron": "electron-builder",
+    "build:win": "pnpm run build:web && electron-builder --win --publish=never",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
     "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
-    "electron:build": "npm run build:web && electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [
@@ -38,26 +36,5 @@
   },
   "dependencies": {
     "vue": "^3.4.0"
-  },
-  "build": {
-    "appId": "com.example.electron-vue-template",
-    "productName": "Electron Vue Template",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "dist-electron/**/*",
-      "node_modules/**/*"
-    ],
-    "mac": {
-      "category": "public.app-category.developer-tools"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
-    }
   }
 }

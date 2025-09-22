@@ -1,0 +1,34 @@
+{
+  "appId": "com.electron.app",
+  "directories": {
+    "output": "release"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "shortcutName": "ElectronApp",
+    "artifactName": "WinSetup.${ext}"
+  },
+  "win": {
+    "icon": "static/logo.png",
+    "target": "nsis",
+    "signAndEditExecutable": false,
+    "forceCodeSigning": false
+  },
+  "forceCodeSigning": false,
+  "mac": {
+    "icon": "static/logo.png",
+    "target": "dmg"
+  },
+  "linux": {
+    "icon": "static/logo.png",
+    "target": [
+      "snap"
+    ]
+  },
+  "files": [
+    "dist/**/*",
+    "electron/**/*"
+  ]
+}

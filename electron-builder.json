@@ -29,5 +29,8 @@
   },
   "files": [
     "out/**/*"
-  ]
+  ],
+  "extraMetadata": {
+    "main": "out/electron/main.cjs"
+  }
 }

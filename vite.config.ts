@@ -1,12 +1,24 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+import copy from 'rollup-plugin-copy'
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    copy({
+      targets: [
+        {
+          src: 'electron/**/*',
+          dest: 'out/electron'
+        }
+      ],
+      hook: 'writeBundle' // 在构建完成后执行复制
+    })
+  ],
   base: './',
   build: {
-    outDir: 'dist',
+    outDir: 'out/dist',
     assetsDir: 'assets',
     rollupOptions: {
       input: {
@@ -22,9 +34,5 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src')
     }
-  },
-  // Electron 主进程构建配置
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
   }
 })

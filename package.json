@@ -2,7 +2,7 @@
   "name": "electron-vue-template",
   "version": "1.0.0",
   "description": "Electron + Vue 3 + Vite 开发模板",
-  "main": "electron/main.cjs",
+  "main": "out/electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -29,6 +29,7 @@
     "cross-env": "^10.0.0",
     "electron": "^28.0.0",
     "electron-builder": "^24.9.1",
+    "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.9.2",
     "vite": "^5.0.0",
     "vue-tsc": "^3.0.7",

@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = require('electron')
 const path = require('path')
 
 // 开发环境判断
-const isDev = process.env.NODE_ENV === 'development' || process.env.NODE_ENV !== 'production'
+const isDev = process.env.NODE_ENV === 'development'
 
 let mainWindow
 

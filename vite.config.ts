@@ -11,6 +11,10 @@ export default defineConfig({
         {
           src: 'electron/**/*',
           dest: 'out/electron'
+        },
+        {
+          src: 'static/**/*',
+          dest: 'out/static'
         }
       ],
       hook: 'writeBundle' // 在构建完成后执行复制

@@ -31,6 +31,6 @@
     "out/**/*"
   ],
   "extraMetadata": {
-    "main": "out/electron/main.cjs"
+    "main": "out/electron/main.js"
   }
 }

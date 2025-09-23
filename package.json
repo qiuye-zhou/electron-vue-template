@@ -2,15 +2,15 @@
   "name": "electron-vue-template",
   "version": "1.0.0",
   "description": "Electron + Vue 3 + Vite 开发模板",
-  "main": "electron/main.cjs",
-  "type": "module",
+  "main": "out/electron/main.js",
   "scripts": {
     "dev": "vite",
     "build:web": "vue-tsc && vite build",
-    "build:win": "pnpm run build:web && electron-builder --win --publish=never",
+    "build:electron": "tsc --project tsconfig.electron.json",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
-    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "electron:dev": "concurrently \"npm run build:web && npm run build:electron && npm run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "build:win": "npm run build:web && npm run build:electron && electron-builder --win --publish=never",
     "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [

@@ -9,10 +9,6 @@ export default defineConfig({
     copy({
       targets: [
         {
-          src: 'electron/**/*',
-          dest: 'out/electron'
-        },
-        {
           src: 'static/**/*',
           dest: 'out/static'
         }

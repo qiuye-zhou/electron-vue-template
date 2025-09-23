@@ -1,12 +1,13 @@
-const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = require('electron')
-const path = require('path')
+import { app, BrowserWindow, Menu, shell, ipcMain, dialog, MenuItemConstructorOptions } from 'electron'
+import * as path from 'path'
+import * as fs from 'fs'
 
 // 开发环境判断
 const isDev = process.env.NODE_ENV === 'development'
 
-let mainWindow
+let mainWindow: BrowserWindow | null = null
 
-function createWindow() {
+function createWindow(): void {
   // 创建浏览器窗口
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -16,7 +17,6 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
       preload: path.join(__dirname, 'preload.js')
     },
     icon: path.join(__dirname, '../static/logo.png'), // 应用图标
@@ -28,15 +28,15 @@ function createWindow() {
   if (isDev) {
     // 开发环境：加载 Vite 开发服务器
     // 等待 Vite 服务器启动，然后加载页面
-    const loadDevServer = () => {
+    const loadDevServer = (): void => {
       const devServerUrl = 'http://localhost:5173'
-      mainWindow.loadURL(devServerUrl).catch(() => {
+      mainWindow!.loadURL(devServerUrl).catch(() => {
         // 如果 5173 端口不可用，尝试 5174
         const altDevServerUrl = 'http://localhost:5174'
-        mainWindow.loadURL(altDevServerUrl).catch((err) => {
+        mainWindow!.loadURL(altDevServerUrl).catch((err: Error) => {
           console.error('无法连接到开发服务器:', err)
           // 如果开发服务器不可用，显示错误页面
-          mainWindow.loadURL('data:text/html,<h1>开发服务器未启动</h1><p>请先运行 npm run dev</p>')
+          mainWindow!.loadURL('data:text/html,<h1>开发服务器未启动</h1><p>请先运行 npm run dev</p>')
         })
       })
     }
@@ -53,7 +53,7 @@ function createWindow() {
 
   // 窗口准备好后显示
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow!.show()
   })
 
   // 当窗口被关闭时
@@ -94,8 +94,8 @@ app.on('window-all-closed', () => {
 })
 
 // 创建应用菜单
-function createMenu() {
-  const template = [
+function createMenu(): void {
+  const template: MenuItemConstructorOptions[] = [
     {
       label: '文件',
       submenu: [
@@ -176,13 +176,13 @@ function createMenu() {
 }
 
 // IPC 处理器
-ipcMain.handle('window:minimize', () => {
+ipcMain.handle('window:minimize', (): void => {
   if (mainWindow) {
     mainWindow.minimize()
   }
 })
 
-ipcMain.handle('window:maximize', () => {
+ipcMain.handle('window:maximize', (): void => {
   if (mainWindow) {
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize()
@@ -192,14 +192,14 @@ ipcMain.handle('window:maximize', () => {
   }
 })
 
-ipcMain.handle('window:close', () => {
+ipcMain.handle('window:close', (): void => {
   if (mainWindow) {
     mainWindow.close()
   }
 })
 
-ipcMain.handle('dialog:openFile', async () => {
-  const result = await dialog.showOpenDialog(mainWindow, {
+ipcMain.handle('dialog:openFile', async (): Promise<string | null> => {
+  const result = await dialog.showOpenDialog(mainWindow!, {
     properties: ['openFile'],
     filters: [
       { name: '所有文件', extensions: ['*'] },
@@ -214,8 +214,8 @@ ipcMain.handle('dialog:openFile', async () => {
   return null
 })
 
-ipcMain.handle('dialog:saveFile', async (event, content) => {
-  const result = await dialog.showSaveDialog(mainWindow, {
+ipcMain.handle('dialog:saveFile', async (event, content: string): Promise<string | null> => {
+  const result = await dialog.showSaveDialog(mainWindow!, {
     filters: [
       { name: '文本文件', extensions: ['txt'] },
       { name: 'Markdown 文件', extensions: ['md'] },
@@ -224,28 +224,27 @@ ipcMain.handle('dialog:saveFile', async (event, content) => {
   })
 
   if (!result.canceled && result.filePath) {
-    const fs = require('fs')
     try {
       fs.writeFileSync(result.filePath, content, 'utf8')
       return result.filePath
     } catch (error) {
-      throw new Error(`保存文件失败: ${error.message}`)
+      throw new Error(`保存文件失败: ${(error as Error).message}`)
     }
   }
   return null
 })
 
-ipcMain.handle('send-message', (event, message) => {
+ipcMain.handle('send-message', (event, message: string): string => {
   console.log('收到渲染进程消息:', message)
   // 可以在这里处理消息并发送回渲染进程
-  mainWindow.webContents.send('main-message', `主进程收到: ${message}`)
+  mainWindow!.webContents.send('main-message', `主进程收到: ${message}`)
   return `已收到消息: ${message}`
 })
 
 // 安全设置：防止新窗口创建
 app.on('web-contents-created', (event, contents) => {
-  contents.on('new-window', (event, navigationUrl) => {
-    event.preventDefault()
-    shell.openExternal(navigationUrl)
+  contents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url)
+    return { action: 'deny' }
   })
 })

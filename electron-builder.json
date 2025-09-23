@@ -1,14 +1,15 @@
 {
   "appId": "com.electron.app",
+  "productName": "electronApp",
+  "copyright": "Copyright © 2025 electronApp",
   "directories": {
     "output": "release"
   },
+  "artifactName": "${productName}-${version}-setup.${ext}",
   "nsis": {
     "oneClick": false,
     "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "shortcutName": "ElectronApp",
-    "artifactName": "WinSetup.${ext}"
+    "allowToChangeInstallationDirectory": true
   },
   "win": {
     "icon": "static/logo.png",

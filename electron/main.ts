@@ -30,14 +30,10 @@ function createWindow(): void {
     // 等待 Vite 服务器启动，然后加载页面
     const loadDevServer = (): void => {
       const devServerUrl = 'http://localhost:5173'
-      mainWindow!.loadURL(devServerUrl).catch(() => {
-        // 如果 5173 端口不可用，尝试 5174
-        const altDevServerUrl = 'http://localhost:5174'
-        mainWindow!.loadURL(altDevServerUrl).catch((err: Error) => {
+      mainWindow!.loadURL(devServerUrl).catch((err) => {
           console.error('无法连接到开发服务器:', err)
           // 如果开发服务器不可用，显示错误页面
-          mainWindow!.loadURL('data:text/html,<h1>开发服务器未启动</h1><p>请先运行 npm run dev</p>')
-        })
+          mainWindow!.loadURL('data:text/html,<meta charset="utf-8"><h1>开发服务器未启动</h1><p>请先运行 npm run dev</p>')
       })
     }
 

@@ -1,22 +1,23 @@
 # Electron Vue Template
 
-一个现代化的 Electron + Vue 3 + Vite 桌面应用开发模板，提供完整的开发环境和构建配置。
+一个现代化的 Electron + Vue 3 + Vite + TypeScript 桌面应用开发模板，提供完整的开发环境和构建配置。
 
 ## ✨ 特性
 
 - 🚀 **Vite** - 极速的构建工具和开发服务器
 - 🎯 **Vue 3** - 渐进式 JavaScript 框架，支持 Composition API
 - 🖥️ **Electron** - 跨平台桌面应用开发框架
-- 📦 **TypeScript** - 可选的类型支持
+- 📦 **TypeScript** - 完整的类型支持和类型安全
 - 🎨 **现代化 UI** - 响应式设计和美观的界面
 - 🔧 **完整配置** - 开发、构建、打包一体化
+- 📱 **跨平台支持** - Windows、macOS、Linux 一键打包
 
 ## 🚀 快速开始
 
 ### 环境要求
 
 - Node.js >= 16.0.0
-- npm >= 8.0.0 或 yarn >= 1.22.0
+- npm >= 8.0.0 或 yarn >= 1.22.0 或 pnpm >= 7.0.0
 
 ### 安装依赖
 
@@ -24,17 +25,15 @@
 npm install
 # 或
 yarn install
+# 或
+pnpm install
 ```
 
 ### 开发模式
 
 ```bash
-# 启动开发服务器和 Electron
+# 一键启动开发环境（推荐）
 npm run electron:dev
-
-# 或者分别启动
-npm run dev          # 启动 Vite 开发服务器
-npm run electron:dev # 启动 Electron（需要先启动 Vite）
 ```
 
 ### 构建应用
@@ -43,11 +42,14 @@ npm run electron:dev # 启动 Electron（需要先启动 Vite）
 # 构建 Web 应用
 npm run build:web
 
-# 构建 Electron 应用
+# 构建 Electron 主进程
 npm run build:electron
 
-# 一键构建
-npm run build
+# 构建 Windows 安装包
+npm run build:win
+
+# 类型检查
+npm run type-check
 ```
 
 ## 📁 项目结构
@@ -55,17 +57,23 @@ npm run build
 ```
 electron-vue-template/
 ├── electron/                 # Electron 主进程文件
-│   ├── main.js             # 主进程入口
-│   └── preload.js          # 预加载脚本
+│   ├── main.ts             # 主进程入口（TypeScript）
+│   └── preload.ts          # 预加载脚本（TypeScript）
 ├── src/                    # Vue 应用源码
 │   ├── App.vue            # 主应用组件
-│   ├── main.js            # Vue 应用入口
-│   └── style.css          # 全局样式
-├── scripts/               # 构建脚本
-│   ├── build.js          # 构建脚本
-│   └── dev.js            # 开发脚本
+│   ├── main.ts            # Vue 应用入口（TypeScript）
+│   ├── style.css          # 全局样式
+│   └── types/             # TypeScript 类型定义
+│       ├── electron.d.ts  # Electron API 类型
+│       └── vue-shim.d.ts  # Vue 类型声明
+├── static/                # 静态资源
+│   └── logo.png           # 应用图标
 ├── index.html             # HTML 模板
-├── vite.config.js         # Vite 配置
+├── vite.config.ts         # Vite 配置（TypeScript）
+├── tsconfig.json          # TypeScript 配置
+├── tsconfig.electron.json # Electron TypeScript 配置
+├── tsconfig.node.json     # Node.js TypeScript 配置
+├── electron-builder.json  # Electron Builder 配置
 ├── package.json           # 项目配置
 └── README.md              # 项目说明
 ```
@@ -74,51 +82,71 @@ electron-vue-template/
 
 ### 添加新功能
 
-1. 在 `src/` 目录下创建 Vue 组件
-2. 在 `electron/main.js` 中添加主进程逻辑
-3. 在 `electron/preload.js` 中暴露安全的 API
+1. 在 `src/` 目录下创建 Vue 组件（支持 TypeScript）
+2. 在 `electron/main.ts` 中添加主进程逻辑
+3. 在 `electron/preload.ts` 中暴露安全的 API
+4. 在 `src/types/electron.d.ts` 中定义类型接口
 
 ### 自定义配置
 
-- **Vite 配置**: 修改 `vite.config.js`
-- **Electron 配置**: 修改 `electron/main.js`
-- **构建配置**: 修改 `package.json` 中的 `build` 字段
+- **Vite 配置**: 修改 `vite.config.ts`
+- **TypeScript 配置**: 修改 `tsconfig.json`、`tsconfig.electron.json`
+- **Electron 配置**: 修改 `electron/main.ts`
+- **构建配置**: 修改 `electron-builder.json`
+
+### TypeScript 支持
+
+- 完整的类型检查和智能提示
+- Vue 3 Composition API 类型支持
+- Electron API 类型定义
+- 路径别名 `@/` 指向 `src/` 目录
 
 ### 安全最佳实践
 
 - 使用 `contextIsolation: true` 和 `nodeIntegration: false`
 - 通过预加载脚本暴露安全的 API
 - 验证所有来自渲染进程的输入
+- IPC 通信使用类型安全的接口
 
 ## 📦 打包发布
 
 ### 构建选项
 
 ```bash
-# 构建当前平台
-npm run build:electron
+# 构建 Windows 安装包
+npm run build:win
 
-# 构建所有平台（需要对应平台的构建工具）
-npm run build:electron -- --win --mac --linux
+# 使用 electron-builder 构建其他平台
+npx electron-builder --win    # Windows
+npx electron-builder --mac    # macOS
+npx electron-builder --linux  # Linux
 ```
 
 ### 发布配置
 
-在 `package.json` 的 `build` 字段中配置：
+在 `electron-builder.json` 中配置：
 
 ```json
 {
-  "build": {
-    "appId": "com.yourcompany.yourapp",
-    "productName": "Your App Name",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "dist-electron/**/*",
-      "node_modules/**/*"
-    ]
+  "appId": "com.electron.app",
+  "productName": "electronApp",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "out/**/*"
+  ],
+  "win": {
+    "icon": "static/logo.png",
+    "target": "nsis"
+  },
+  "mac": {
+    "icon": "static/logo.png",
+    "target": "dmg"
+  },
+  "linux": {
+    "icon": "static/logo.png",
+    "target": ["snap"]
   }
 }
 ```
@@ -126,11 +154,27 @@ npm run build:electron -- --win --mac --linux
 ## 🔧 技术栈
 
 - **前端框架**: Vue 3 (Composition API)
-- **构建工具**: Vite
-- **桌面框架**: Electron
-- **开发语言**: JavaScript/TypeScript
+- **构建工具**: Vite 7.x
+- **桌面框架**: Electron 28.x
+- **开发语言**: TypeScript 5.x
 - **样式**: CSS3 + 现代布局
-- **包管理**: npm/yarn
+- **包管理**: npm/yarn/pnpm
+- **打包工具**: electron-builder
+- **类型检查**: vue-tsc
+
+## 📋 主要依赖
+
+### 开发依赖
+- `@vitejs/plugin-vue` - Vite Vue 插件
+- `electron` - Electron 框架
+- `electron-builder` - 应用打包工具
+- `typescript` - TypeScript 编译器
+- `vue-tsc` - Vue TypeScript 类型检查
+- `concurrently` - 并发执行命令
+- `wait-on` - 等待服务启动
+
+### 生产依赖
+- `vue` - Vue 3 框架
 
 ## 📄 许可证
 

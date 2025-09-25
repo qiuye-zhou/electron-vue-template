@@ -29,7 +29,9 @@
     /* Additional options */
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    "types": ["vite/client"]
   },
   "include": [
     "src/**/*.ts",

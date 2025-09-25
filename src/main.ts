@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './style.css'
+import './styles/style.css'
 import type { ElectronAPI } from './types/electron'
 import router from '@/router/index'
 

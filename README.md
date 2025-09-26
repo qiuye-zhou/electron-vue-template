@@ -9,7 +9,6 @@
 - 🛣️ **Vue Router 4** - 官方路由管理器，支持动态路由
 - 🖥️ **Electron 28.x** - 跨平台桌面应用开发框架
 - 📦 **TypeScript 5.x** - 完整的类型支持和类型安全
-- 🎨 **现代化 UI** - 响应式设计和美观的界面
 - 🔧 **完整配置** - 开发、构建、打包一体化
 - 📱 **跨平台支持** - Windows、macOS、Linux 一键打包
 
@@ -57,6 +56,9 @@ npm run build:win
 
 # 类型检查
 npm run type-check
+
+# 代码格式修复
+npm run lint:fix
 ```
 
 ## 📁 项目结构

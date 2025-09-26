@@ -93,20 +93,20 @@ input:focus, textarea:focus {
   .feature-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .demo-buttons {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .demo-btn {
     width: 200px;
   }
-  
+
   .app-header h1 {
     font-size: 2rem;
   }
-  
+
   .app-header p {
     font-size: 1rem;
   }

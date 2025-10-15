@@ -1,5 +1,4 @@
-import { RouteRecordRaw } from "vue-router"
-
+import { RouteRecordRaw } from 'vue-router'
 
 /**
  * 共同常驻路由

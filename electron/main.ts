@@ -1,4 +1,12 @@
-import { app, BrowserWindow, Menu, shell, ipcMain, dialog, MenuItemConstructorOptions } from 'electron'
+import {
+  app,
+  BrowserWindow,
+  Menu,
+  shell,
+  ipcMain,
+  dialog,
+  MenuItemConstructorOptions,
+} from 'electron'
 import * as path from 'path'
 import * as fs from 'fs'
 
@@ -17,11 +25,11 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
     },
     icon: path.join(__dirname, '../static/logo.png'), // 应用图标
     show: false, // 先不显示，等加载完成后再显示
-    titleBarStyle: 'default'
+    titleBarStyle: 'default',
   })
 
   // 加载应用
@@ -31,9 +39,11 @@ function createWindow(): void {
     const loadDevServer = (): void => {
       const devServerUrl = 'http://localhost:5173'
       mainWindow!.loadURL(devServerUrl).catch((err) => {
-          console.error('无法连接到开发服务器:', err)
-          // 如果开发服务器不可用，显示错误页面
-          mainWindow!.loadURL('data:text/html,<meta charset="utf-8"><h1>开发服务器未启动</h1><p>请先运行 npm run dev</p>')
+        console.error('无法连接到开发服务器:', err)
+        // 如果开发服务器不可用，显示错误页面
+        mainWindow!.loadURL(
+          'data:text/html,<meta charset="utf-8"><h1>开发服务器未启动</h1><p>请先运行 npm run dev</p>',
+        )
       })
     }
 
@@ -101,7 +111,7 @@ function createMenu(): void {
           click: () => {
             // 这里可以添加新建文件的逻辑
             console.log('新建文件')
-          }
+          },
         },
         {
           label: '打开',
@@ -109,7 +119,7 @@ function createMenu(): void {
           click: () => {
             // 这里可以添加打开文件的逻辑
             console.log('打开文件')
-          }
+          },
         },
         { type: 'separator' },
         {
@@ -117,9 +127,9 @@ function createMenu(): void {
           accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
           click: () => {
             app.quit()
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: '编辑',
@@ -129,29 +139,42 @@ function createMenu(): void {
         { type: 'separator' },
         { label: '剪切', accelerator: 'CmdOrCtrl+X', role: 'cut' },
         { label: '复制', accelerator: 'CmdOrCtrl+C', role: 'copy' },
-        { label: '粘贴', accelerator: 'CmdOrCtrl+V', role: 'paste' }
-      ]
+        { label: '粘贴', accelerator: 'CmdOrCtrl+V', role: 'paste' },
+      ],
     },
     {
       label: '视图',
       submenu: [
         { label: '重新加载', accelerator: 'CmdOrCtrl+R', role: 'reload' },
-        { label: '强制重新加载', accelerator: 'CmdOrCtrl+Shift+R', role: 'forceReload' },
-        { label: '切换开发者工具', accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Ctrl+Shift+I', role: 'toggleDevTools' },
+        {
+          label: '强制重新加载',
+          accelerator: 'CmdOrCtrl+Shift+R',
+          role: 'forceReload',
+        },
+        {
+          label: '切换开发者工具',
+          accelerator:
+            process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Ctrl+Shift+I',
+          role: 'toggleDevTools',
+        },
         { type: 'separator' },
         { label: '实际大小', accelerator: 'CmdOrCtrl+0', role: 'resetZoom' },
         { label: '放大', accelerator: 'CmdOrCtrl+Plus', role: 'zoomIn' },
         { label: '缩小', accelerator: 'CmdOrCtrl+-', role: 'zoomOut' },
         { type: 'separator' },
-        { label: '切换全屏', accelerator: process.platform === 'darwin' ? 'Ctrl+Cmd+F' : 'F11', role: 'togglefullscreen' }
-      ]
+        {
+          label: '切换全屏',
+          accelerator: process.platform === 'darwin' ? 'Ctrl+Cmd+F' : 'F11',
+          role: 'togglefullscreen',
+        },
+      ],
     },
     {
       label: '窗口',
       submenu: [
         { label: '最小化', accelerator: 'CmdOrCtrl+M', role: 'minimize' },
-        { label: '关闭', accelerator: 'CmdOrCtrl+W', role: 'close' }
-      ]
+        { label: '关闭', accelerator: 'CmdOrCtrl+W', role: 'close' },
+      ],
     },
     {
       label: '帮助',
@@ -161,10 +184,10 @@ function createMenu(): void {
           click: () => {
             // 这里可以添加关于对话框
             console.log('关于应用')
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ]
 
   const menu = Menu.buildFromTemplate(template)
@@ -200,8 +223,8 @@ ipcMain.handle('dialog:openFile', async (): Promise<string | null> => {
     filters: [
       { name: '所有文件', extensions: ['*'] },
       { name: '文本文件', extensions: ['txt', 'md'] },
-      { name: '图片文件', extensions: ['jpg', 'png', 'gif'] }
-    ]
+      { name: '图片文件', extensions: ['jpg', 'png', 'gif'] },
+    ],
   })
 
   if (!result.canceled && result.filePaths.length > 0) {
@@ -210,25 +233,28 @@ ipcMain.handle('dialog:openFile', async (): Promise<string | null> => {
   return null
 })
 
-ipcMain.handle('dialog:saveFile', async (event, content: string): Promise<string | null> => {
-  const result = await dialog.showSaveDialog(mainWindow!, {
-    filters: [
-      { name: '文本文件', extensions: ['txt'] },
-      { name: 'Markdown 文件', extensions: ['md'] },
-      { name: '所有文件', extensions: ['*'] }
-    ]
-  })
+ipcMain.handle(
+  'dialog:saveFile',
+  async (event, content: string): Promise<string | null> => {
+    const result = await dialog.showSaveDialog(mainWindow!, {
+      filters: [
+        { name: '文本文件', extensions: ['txt'] },
+        { name: 'Markdown 文件', extensions: ['md'] },
+        { name: '所有文件', extensions: ['*'] },
+      ],
+    })
 
-  if (!result.canceled && result.filePath) {
-    try {
-      fs.writeFileSync(result.filePath, content, 'utf8')
-      return result.filePath
-    } catch (error) {
-      throw new Error(`保存文件失败: ${(error as Error).message}`)
+    if (!result.canceled && result.filePath) {
+      try {
+        fs.writeFileSync(result.filePath, content, 'utf8')
+        return result.filePath
+      } catch (error) {
+        throw new Error(`保存文件失败: ${(error as Error).message}`)
+      }
     }
-  }
-  return null
-})
+    return null
+  },
+)
 
 ipcMain.handle('send-message', (event, message: string): string => {
   console.log('收到渲染进程消息:', message)

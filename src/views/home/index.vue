@@ -14,7 +14,7 @@ const showSystemInfo = (): void => {
       平台: window.electronAPI.platform,
       Node版本: window.electronAPI.versions.node,
       Chrome版本: window.electronAPI.versions.chrome,
-      Electron版本: window.electronAPI.versions.electron
+      Electron版本: window.electronAPI.versions.electron,
     }
     systemInfo.value = JSON.stringify(info, null, 2)
   } else {
@@ -27,7 +27,7 @@ const openFile = async (): Promise<void> => {
   if (window.electronAPI) {
     try {
       const result = await window.electronAPI.openFile()
-      console.log("🚀 ~ openFile ~ result:", result)
+      console.log('🚀 ~ openFile ~ result:', result)
       message.value = result ? `已选择文件: ${result}` : '未选择文件'
     } catch (error) {
       message.value = `打开文件失败: ${(error as Error).message}`
@@ -62,61 +62,61 @@ onMounted(() => {
 })
 </script>
 <template>
-        <header class="app-header">
-      <h1>🚀 Electron + Vue 3 + Vite</h1>
-      <p>现代化的桌面应用开发模板</p>
-    </header>
+  <header class="app-header">
+    <h1>🚀 Electron + Vue 3 + Vite</h1>
+    <p>现代化的桌面应用开发模板</p>
+  </header>
 
-    <main class="app-main">
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>⚡ Vite</h3>
-          <p>极速的构建工具和开发服务器</p>
-        </div>
-        <div class="feature-card">
-          <h3>🎯 Vue 3</h3>
-          <p>渐进式 JavaScript 框架</p>
-        </div>
-        <div class="feature-card">
-          <h3>🖥️ Electron</h3>
-          <p>跨平台桌面应用开发</p>
-        </div>
+  <main class="app-main">
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>⚡ Vite</h3>
+        <p>极速的构建工具和开发服务器</p>
+      </div>
+      <div class="feature-card">
+        <h3>🎯 Vue 3</h3>
+        <p>渐进式 JavaScript 框架</p>
+      </div>
+      <div class="feature-card">
+        <h3>🖥️ Electron</h3>
+        <p>跨平台桌面应用开发</p>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>功能演示</h2>
+
+      <div class="demo-buttons">
+        <button @click="showSystemInfo" class="demo-btn">显示系统信息</button>
+        <button @click="openFile" class="demo-btn">打开文件</button>
+        <button @click="minimizeWindow" class="demo-btn">最小化窗口</button>
+        <button
+          @click="
+            () =>
+              router.push({
+                path: '/404',
+              })
+          "
+          class="demo-btn"
+        >
+          Go 404
+        </button>
       </div>
 
-      <div class="demo-section">
-        <h2>功能演示</h2>
-
-        <div class="demo-buttons">
-          <button @click="showSystemInfo" class="demo-btn">
-            显示系统信息
-          </button>
-          <button @click="openFile" class="demo-btn">
-            打开文件
-          </button>
-          <button @click="minimizeWindow" class="demo-btn">
-            最小化窗口
-          </button>
-          <button @click="() => router.push({
-            path: '/404'
-          })" class="demo-btn">
-            Go 404
-          </button>
-        </div>
-
-        <div v-if="systemInfo" class="info-display">
-          <h3>系统信息</h3>
-          <pre>{{ systemInfo }}</pre>
-        </div>
-
-        <div v-if="message" class="message-display">
-          <p>{{ message }}</p>
-        </div>
+      <div v-if="systemInfo" class="info-display">
+        <h3>系统信息</h3>
+        <pre>{{ systemInfo }}</pre>
       </div>
-    </main>
 
-    <footer class="app-footer">
-      <p>© 2025 Electron Vue Template - 基于 MIT 许可证</p>
-    </footer>
+      <div v-if="message" class="message-display">
+        <p>{{ message }}</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>© 2025 Electron Vue Template - 基于 MIT 许可证</p>
+  </footer>
 </template>
 
 <style scoped>
@@ -154,7 +154,9 @@ onMounted(() => {
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
@@ -213,7 +215,8 @@ onMounted(() => {
   transform: translateY(1px);
 }
 
-.info-display, .message-display {
+.info-display,
+.message-display {
   background: #f8f9fa;
   border-radius: 8px;
   padding: 1.5rem;

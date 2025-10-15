@@ -27,15 +27,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
   versions: {
     node: process.versions.node,
     chrome: process.versions.chrome,
-    electron: process.versions.electron
+    electron: process.versions.electron,
   },
 
   // IPC 通信示例
-  sendMessage: (message: string): Promise<string> => ipcRenderer.invoke('send-message', message),
+  sendMessage: (message: string): Promise<string> =>
+    ipcRenderer.invoke('send-message', message),
 
   // 文件操作示例
   openFile: (): Promise<string | null> => ipcRenderer.invoke('dialog:openFile'),
-  saveFile: (content: string): Promise<string | null> => ipcRenderer.invoke('dialog:saveFile', content),
+  saveFile: (content: string): Promise<string | null> =>
+    ipcRenderer.invoke('dialog:saveFile', content),
 
   // 窗口控制
   minimize: (): Promise<void> => ipcRenderer.invoke('window:minimize'),
@@ -50,7 +52,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // 移除监听器
   removeAllListeners: (channel: string): void => {
     ipcRenderer.removeAllListeners(channel)
-  }
+  },
 } as ElectronAPI)
 
 // 监听 DOM 加载完成

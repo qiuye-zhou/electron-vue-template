@@ -10,11 +10,11 @@ export default defineConfig({
       targets: [
         {
           src: 'static/**/*',
-          dest: 'out/static'
-        }
+          dest: 'out/static',
+        },
       ],
-      hook: 'writeBundle' // 在构建完成后执行复制
-    })
+      hook: 'writeBundle', // 在构建完成后执行复制
+    }),
   ],
   base: './',
   build: {
@@ -22,17 +22,17 @@ export default defineConfig({
     assetsDir: 'assets',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html')
-      }
-    }
+        main: resolve(__dirname, 'index.html'),
+      },
+    },
   },
   server: {
     port: 5173,
-    host: 'localhost'
+    host: 'localhost',
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
-    }
-  }
+      '@': resolve(__dirname, 'src'),
+    },
+  },
 })

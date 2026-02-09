@@ -26,7 +26,7 @@ const goBack = () => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .not-found-container {
   display: flex;
   align-items: center;

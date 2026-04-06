@@ -14,7 +14,7 @@
   "win": {
     "icon": "static/logo.png",
     "target": "nsis",
-    "signAndEditExecutable": false,
+    "signAndEditExecutable": true,
     "forceCodeSigning": false
   },
   "forceCodeSigning": false,
